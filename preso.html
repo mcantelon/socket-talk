@@ -485,23 +485,33 @@ io.sockets.in('Lobby').emit('eventType', eventData);
         </h3>
         <ul>
           <li>
-            Hash of active all rooms/sockets subscribed
+            Hash of active all rooms/socket IDs subscribed
           </li>
         </ul>
         <section>
         <pre>io.sockets.manager.rooms</pre>
         </section>
-        <ul>
-          <li>
-            List of clients in a room
-          </li>
-        </ul>
+        <p>You get data like this:</p>
+<section><pre>{ '': 
+   [ '1493563052698187148',
+     '1804042744551045346',
+     '19056402231855815978' ],
+  '/Lobby': [ '1493563052698187148' ],
+  '/Cellar': [ '1804042744551045346', '19056402231855815978' ] }</pre></section>
+      </article>
+
+      <article>
+       <h3>
+          Need sockets in a single room?
+        </h3>
+          <p>
+            Provide array of socket <i>objects</i>, not IDs, in room
+          </p>
         <section>
         <pre>
 io.sockets.clients('Lobby');
 </pre>
         </section>
-
       </article>
 
 
@@ -581,19 +591,22 @@ io.sockets.clients('Lobby');
 
       <article>
         <h3>
-          Namespaces
+          Multiplex with namespaces
         </h3>
+        <p>Specify on the server:</p>
+        <section><pre>io.of('/chat').on('connection', function (socket) {
+  // deal with socket
+});</pre></section>
+        <p>Then connect with the client:</p>
         <ul>
-          <li>Provides way to multiplex</li>
-          <li>Clients include Socket.io JavaScript using different URL</li>
-          <li>Normally clients connect with <code>io.connect()</code></li>
-          <li>With namespace is could be something like <code>io.connect()</code></li>
+          <li>Normally clients connect with <code>io.connect('http://thing.com')</code></li>
+          <li>With namespace would be something like <code>io.connect('http://thing.com/chat')</code></li>
         </ul>
       </article>
 
       <article>
         <h1>
-          The basics
+          Production considerations
         </h1>
       </article>
 
@@ -653,7 +666,7 @@ io.sockets.clients('Lobby');
           Redis can relay between processes/servers
         </h3>
         <p>
-          Configure to use RedisStore
+          Configure to use RedisStore:
         </p>
         <section>
         <pre>var redis = require('socket.io/node_modules/redis'),
