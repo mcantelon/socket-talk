@@ -550,27 +550,6 @@ io.sockets.clients('Lobby');
 
       <article>
        <h3>
-          Storing client-specific data
-        </h3>
-        <p>Storing client data:</p>
-        <section>
-        <pre>socket.set('name', name, function () {
-  // do the next thing
-});</pre>
-        </section>
-
-        <p>Server listener callback takes additional argument:</p>
-        <section>
-        <pre>socket.get('name', function (err, name) {
-  // do something with data
-});</pre>
-        </section>
-      </article>
-
-
-
-      <article>
-       <h3>
           Acknowledgements
         </h3>
         <p>Socket.io has mechanism for this...</p>
@@ -591,7 +570,7 @@ io.sockets.clients('Lobby');
 
       <article>
         <h3>
-          Multiplex with namespaces
+          Multiplexing with namespaces
         </h3>
         <p>Specify on the server:</p>
         <section><pre>io.of('/chat').on('connection', function (socket) {
@@ -680,6 +659,25 @@ io.set('store', new RedisStore({
   redisSub:    sub,
   redisClient: client
 }));</pre>
+        </section>
+      </article>
+
+      <article>
+       <h3>
+          Server can store client-specific data
+        </h3>
+        <p>Storing data:</p>
+        <section>
+        <pre>socket.set('key', value, function () {
+  // do the next thing
+});</pre>
+        </section>
+
+        <p>Retrieving data:</p>
+        <section>
+        <pre>socket.get('key', function (err, value) {
+  // do something with value
+});</pre>
         </section>
       </article>
 
