@@ -1,0 +1,15 @@
+<html><body>
+<script src='/socket.io/socket.io.js'></script>
+<script>
+window.onload = function() {
+  var socket = io.connect();
+  socket.on('tickEvent', function(tickData) {
+    document.write(tickData.tick + '<br/>');
+
+    socket.emit('tickReceivedEvent', {
+      'tick': tickData.tick
+    });
+  });
+}
+</script>
+</body></html>
