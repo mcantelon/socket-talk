@@ -107,7 +107,7 @@
             WebSocket is a protocol for bidirectional communication between HTML5-era browsers and servers
           </li>
           <li>
-            Uses WebSocket as a tranport if available, but falls back to others if not
+            Uses WebSocket as a transport if available, but falls back to others if not
           </li>
         </ul>
       </article>
@@ -171,17 +171,14 @@
           <li>
             Verbosity and connection overhead slow things down
           </li>
-          <li>
-            AJAX feels a bit clunky to work with
-          </li>
         </ul>
       </article>
 
       <article>
         <h3>
-          AJAX feels a bit clunky
+          AJAX feels a bit clunky too
         </h3>
-        <p>Some Jquery AJAXing:</p>
+        <p>Some JQuery AJAXing:</p>
         <section>
           <pre>$.ajax({
   url: 'http://www.bahamen.com/ajax/question',
@@ -191,7 +188,7 @@
   }
 });</pre>
         </section>
-        <p>Why not just?</p>
+        <p>This would be nicer:</p>
         <section>
           <pre>send('question', {
   'message': 'Who let the dogs out?'
@@ -266,7 +263,7 @@ socket.emit('eventType', eventData);
         </ul>
         <section>
         <pre>
-socket.on('eventType', fuction(eventData) {
+socket.on('eventType', function(eventData) {
   // do some things
 }
 </pre>
@@ -386,25 +383,6 @@ window.onload = function() {
         <h1>
           Multi-room chat example
         </h1>
-      </article>
-
-      <article>
-       <h3>
-          Multi-room chat example app
-        </h3>
-        <ul>
-          <li>
-            <p>Users gets assigned screen name but can change it using a chat command like:</p>
-            <p><code>/nick Goatlorde</code></p>
-          </li>
-          <li>
-            <p>Users can join/create chat rooms using a chat command like:</p>
-            <p><code>/join YogaFans</code></p>
-          </li>
-          <li>
-            Available rooms are shown in a sidebar
-          </li>
-        </ul>
       </article>
 
       <article>
@@ -614,6 +592,12 @@ io.sockets.clients('Lobby');
       </article>
 
       <article>
+        <h1>
+          The basics
+        </h1>
+      </article>
+
+      <article>
        <h3>
           Production configuration
         </h3>
@@ -621,7 +605,7 @@ io.sockets.clients('Lobby');
         Run your app set to production mode:
         </p>
         <section>
-        <pre>NODE_ENV=production node app.js</pre>
+        <pre>$ NODE_ENV=production node app.js</pre>
         </section>
         <p>
         Configuration in Socket.io is Express-style:
