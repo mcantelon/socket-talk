@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+
+<!--
+  Google HTML5 slide template
+
+  Authors: Luke Mahé (code)
+           Marcin Wichary (code and design)
+           
+           Dominic Mazzoni (browser compatibility)
+           Charles Chen (ChromeVox support)
+
+  URL: http://code.google.com/p/html5slides/
+-->
+
+<html>
+  <head>
+    <title>Presentation</title>
+
+    <meta charset='utf-8'>
+    <script
+      src='slides.js'></script>
+  </head>
+  
+  <style>
+    /* Your individual styles here, or just use inline styles if that’s
+       what you want. */
+    
+    
+  </style>
+
+  <body style='display: none'>
+
+    <section class='slides layout-regular template-default'>
+      
+      <!-- Your slides (<article>s) go here. Delete or comment out the
+           slides below. -->
+      
+      <article>
+        <h1>
+          Socket.io: a sack
+          <br>
+          full of good times
+        </h1>
+        <p>
+          Mike Cantelon
+          <br>
+          Nov 1, 2012
+        </p>
+      </article>
+ 
+      <article>
+       <h3>
+          Hi, I'm Mike
+        </h3>
+         <p>
+          <img style='float: right' src='images/nia_cover.jpg'/>
+        </p>
+        <ul>
+          <li>
+            Node.js enthusiast
+          </li>
+          <li>
+            Co-author of "Node.js in Action"
+          </li>
+          <li>
+            Like text adventure games
+          </li>
+          <li>
+            Develop open source digital archiving software
+            for Artefactual Systems
+          </li>
+        </ul>
+      </article>
+
+      <article>
+       <h3>
+          What's Socket.io?
+        </h3>
+        <ul>
+          <li>
+            Makes creating "real-time" apps easy
+          </li>
+          <li>
+            Creates bi-directional streams connecting client and server
+          </li>
+          <li>
+            Has server-side and client-side component
+          </li>
+        </ul>
+        <p>
+          <img class='centered' src='images/bidirectional.png' style='margin-top: 75px'>
+        </p>
+      </article>
+
+      <article>
+       <h3>
+          What's Socket.io?
+        </h3>
+         <p>
+          <img style='float: right' src='images/html5logo.png'/>
+        </p>
+        <ul>
+          <li>
+            Has a simular API to WebSocket
+          </li>
+          <li>
+            WebSocket is a protocol for bidirectional communication between HTML5-era browsers and servers
+          </li>
+          <li>
+            Uses WebSocket as a tranport if available, but falls back to others if not
+          </li>
+        </ul>
+      </article>
+
+      <article>
+       <h3>
+          Lots of supported transports
+        </h3>
+        <ul>
+          <li>
+            WebSocket
+          </li>
+          <li>
+            Adobe Flash socket
+          </li>
+          <li>
+            AJAX long polling
+          </li>
+          <li>
+            AJAX multipart streaming
+          </li>
+          <li>
+            Forever iframe
+          </li>
+          <li>
+            JSONP polling
+          </li>
+        </ul>
+      </article>
+
+      <article>
+       <h3>
+          Can share a TCP/IP port with an HTTP server
+        </h3>
+         <p>
+          <img class='centered' style='margin-top: 40px;' src='images/portsharing.png'/>
+        </p>
+        <p>This works with the HTTP module and Express!</p>
+      </article>
+
+      <article>
+       <h3>
+          Can't we just use the AJAX?
+        </h3>
+         <p>
+          <img class='centered' style='margin-top: 40px;' src='images/nohorse.jpg'/>
+        </p>
+      </article>
+
+      <article>
+       <h3>
+          Why not?
+        </h3>
+        <ul>
+          <li>
+            HTTP is more verbose than needed for simple messages
+          </li>
+          <li>
+            If not long-polling or streaming, a TCP/IP connection must be opened/closed for each AJAX message
+          </li>
+          <li>
+            Verbosity and connection overhead slow things down
+          </li>
+          <li>
+            AJAX feels a bit clunky to work with
+          </li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>
+          AJAX feels a bit clunky
+        </h3>
+        <p>Some Jquery AJAXing:</p>
+        <section>
+          <pre>$.ajax({
+  url: 'http://www.bahamen.com/ajax/question',
+  type: 'POST',
+  data: {
+    'message': 'Who let the dogs out?'
+  }
+});</pre>
+        </section>
+        <p>Why not just?</p>
+        <section>
+          <pre>send('question', {
+  'message': 'Who let the dogs out?'
+});</pre>
+        </section>
+      </article>
+
+
+      <article>
+       <h3>
+          Socket.io is nice
+        </h3>
+        <ul>
+          <li>
+            Not verbose
+          </li>
+          <li>
+            Uses a single TCP/IP connection
+          </li>
+          <li>
+            Responsive (depending on what transport is active)
+          </li>
+          <li>
+            Offers useful high-level abstractions: <b>broadcasting</b>, <b>rooms</b>, etc.
+          </li>
+        </ul>
+      </article>
+
+      <article>
+       <h3>
+          Broadcasting
+        </h3>
+         <p>
+          <img class='centered' style='margin-top: 50px;' src='images/broadcast.png'/>
+        </p>
+      </article>
+
+      <article>
+       <h3>
+          Sending to rooms
+        </h3>
+         <p>
+          <img class='centered' style='margin-top: 50px;' src='images/channelexample.png'/>
+        </p>
+      </article>
+
+      <article>
+        <h1>
+          The basics
+        </h1>
+      </article>
+
+      <article>
+       <h3>
+          What's the code look like?
+        </h3>
+        <p>Socket.io uses "event emitters" for client and server.</p>
+        <ul>
+          <li>
+            Basic sending
+          </li>
+        </ul>
+        <section>
+        <pre>
+socket.emit('eventType', eventData);
+        </pre>
+        </section>
+        <ul>
+          <li>
+            Basic receiving
+          </li>
+        </ul>
+        <section>
+        <pre>
+socket.on('eventType', fuction(eventData) {
+  // do some things
+}
+</pre>
+        </section>
+      </article>
+
+      <article>
+       <h3>
+          Proof of concept app
+        </h3>
+        <ul>
+          <li>
+            A simple example is good to show how it fits together
+          </li>
+          <li>
+            The server will let client know how many seconds elapsed since connection
+          </li>
+          <li>
+            Client will write this to the browser
+          </li>
+          <li>
+            Client will lets serve know message was received
+          </li>
+        </ul>
+      </article>
+ 
+      <article>
+       <h3>
+          Proof of concept app
+        </h3>
+         <p>
+          <img class='centered' style='margin-top: 50px;' src='images/simpleexample.png'/>
+        </p>
+      </article>
+
+      <article>
+       <h3>
+          What it'll look like
+        </h3>
+         <p>
+          <img class='centered' style='margin-top: 50px;' src='images/socketexampleshot.png'/>
+        </p>
+      </article>
+
+      <article>
+       <h3>
+          Example app's HTTP server
+        </h3>
+        <section>
+        <pre>
+var http = require('http')
+  , socketio = require('socket.io')
+  , fs = require('fs');
+
+fs.readFile('./index.html', function(err, fileData) {
+  var server = http.createServer(function(request, response) {
+    response.writeHead(200, {'Content-Type': 'text/html'});
+    response.end(fileData);
+  });
+
+  server.listen(3000);
+
+  <b>// we'll add socket.io code here!</b>
+});
+        </pre>
+        </section>
+      </article>
+
+      <article>
+       <h3>
+          Example app's Socket.io server
+        </h3>
+        <section>
+        <pre>...
+  var io = socketio.listen(server);
+
+  io.on('connection', function(socket) {
+    var tick = 0;
+    setInterval(function() {
+      tick++;
+      socket.emit('tickEvent', {'tick': tick});
+    }, 1000);
+    socket.on('tickReceivedEvent', function(tickData) {
+      console.log('Socket %s got %d', socket.id, tickData.tick);
+    });
+  });
+...</pre>
+        </section>
+      </article>
+
+      <article>
+       <h3>
+          Example app's HTML code
+        </h3>
+        <section>
+        <pre>
+&lt;html&gt;&lt;body&gt;
+&lt;script src='/socket.io/socket.io.js'&gt;&lt;/script&gt;
+&lt;script&gt;
+window.onload = function() {
+  var socket = io.connect();
+  socket.on('tickEvent', function(tickData) {
+    document.write(tickData.tick + '&lt;br/&gt;');
+
+    socket.emit('tickReceivedEvent', {
+      'tick': tickData.tick
+    });
+  });
+}
+&lt;/script&gt;
+&lt;/body&gt;&lt;/html&gt;
+          </pre>
+        </section>
+      </article>
+
+      <article>
+        <h1>
+          Multi-room chat example
+        </h1>
+      </article>
+
+      <article>
+       <h3>
+          Multi-room chat example app
+        </h3>
+        <ul>
+          <li>
+            <p>Users gets assigned screen name but can change it using a chat command like:</p>
+            <p><code>/nick Goatlorde</code></p>
+          </li>
+          <li>
+            <p>Users can join/create chat rooms using a chat command like:</p>
+            <p><code>/join YogaFans</code></p>
+          </li>
+          <li>
+            Available rooms are shown in a sidebar
+          </li>
+        </ul>
+      </article>
+
+      <article>
+       <h3>
+          What it'll look like
+        </h3>
+         <p>
+          <img class='centered' style='margin-top: 50px;' src='images/chat_done.png'/>
+        </p>
+      </article>
+
+      <article>
+       <h3>
+          What users can do
+        </h3>
+        <ul>
+          <li>
+            <p>Users gets assigned screen name but can change it using a chat command like:</p>
+            <p><code>/nick Goatlorde</code></p>
+          </li>
+          <li>
+            <p>Users can join/create chat rooms using a chat command like:</p>
+            <p><code>/join YogaFans</code></p>
+          </li>
+          <li>Users can send messages broadcast to all users in the same room</li>
+          <li>
+            Available rooms are shown in a sidebar
+          </li>
+        </ul>
+      </article>
+
+      <article>
+       <h3>
+          When a client connects
+        </h3>
+        <ul>
+          <li>Client joins "Lobby"</li>
+          <li>Server assigns guest name</li>
+          <li>Server adds listeners for:
+          <ul>
+            <li>messages from the client</li>
+            <li>name change attempts</li>
+            <li>room creation/change requests</li>
+            <li>disconnection</li>
+          </ul></li>
+        </ul>
+      </article>
+
+      <article>
+       <h3>
+          Joining/leaving rooms
+        </h3>
+        <ul>
+          <li>
+            Joining a room
+          </li>
+        </ul>
+        <section>
+        <pre>socket.join('Lobby');</pre>
+        </section>
+        <ul>
+          <li>
+            Leaving a room
+          </li>
+        </ul>
+        <section>
+        <pre>socket.leave('Lobby');</pre>
+        </section>
+      </article>
+
+      <article>
+       <h3>
+          Broadcasting/listing rooms
+        </h3>
+        <ul>
+          <li>
+            Client broadcasting to a room
+          </li>
+        </ul>
+        <section>
+        <pre>
+socket.broadcast.to(message.room).emit('eventType', eventData);
+</pre>
+        </section>
+        <ul>
+          <li>
+            System can broadcast too
+          </li>
+        </ul>
+        <section>
+        <pre>
+io.sockets.in('Lobby').emit('eventType', eventData);
+</pre>
+        </section>
+      </article>
+
+      <article>
+       <h3>
+          Need info about rooms?
+        </h3>
+        <ul>
+          <li>
+            Hash of active all rooms/sockets subscribed
+          </li>
+        </ul>
+        <section>
+        <pre>io.sockets.manager.rooms</pre>
+        </section>
+        <ul>
+          <li>
+            List of clients in a room
+          </li>
+        </ul>
+        <section>
+        <pre>
+io.sockets.clients('Lobby');
+</pre>
+        </section>
+
+      </article>
+
+
+
+      <article>
+       <h3>
+          When a client disconnects
+        </h3>
+        <ul>
+          <li>
+            Free up their nickname
+          </li>
+          <li>
+            Socket.io automatically makes them leave all rooms
+          </li>
+        </ul>
+        <section>
+        <pre>socket.on('disconnect', function() {
+  // free up client's nickname
+});</pre>
+        </section>
+      </article>
+
+      <article>
+       <h3>
+          Chatroom code
+        </h3>
+        <p><a href='http://github.com/mcantelon/chatrooms-basic'>github.com/mcantelon/chatrooms-basic</a></p>
+      </article>
+
+      <article>
+        <h1>
+          Other handy stuff
+        </h1>
+      </article>
+
+      <article>
+       <h3>
+          Storing client-specific data
+        </h3>
+        <p>Storing client data:</p>
+        <section>
+        <pre>socket.set('name', name, function () {
+  // do the next thing
+});</pre>
+        </section>
+
+        <p>Server listener callback takes additional argument:</p>
+        <section>
+        <pre>socket.get('name', function (err, name) {
+  // do something with data
+});</pre>
+        </section>
+      </article>
+
+
+
+      <article>
+       <h3>
+          Acknowledgements
+        </h3>
+        <p>Socket.io has mechanism for this...</p>
+        <p>Client emits, defining callback:</p>
+        <section>
+        <pre>socket.emit('eventType', eventData, function (ack) {
+  console.log(ack); // do something with acknowledgement
+});</pre>
+        </section>
+
+        <p>Server receives, fires callback:</p>
+        <section>
+        <pre>socket.on('eventType', function (eventData, fn) {
+  fn('Message received!');
+});</pre>
+        </section>
+      </article>
+
+      <article>
+        <h3>
+          Namespaces
+        </h3>
+        <ul>
+          <li>Provides way to multiplex</li>
+          <li>Clients include Socket.io JavaScript using different URL</li>
+          <li>Normally clients connect with <code>io.connect()</code></li>
+          <li>With namespace is could be something like <code>io.connect()</code></li>
+        </ul>
+      </article>
+
+      <article>
+       <h3>
+          Production configuration
+        </h3>
+        <p>
+        Run your app set to production mode:
+        </p>
+        <section>
+        <pre>NODE_ENV=production node app.js</pre>
+        </section>
+        <p>
+        Configuration in Socket.io is Express-style:
+        </p>
+        <section><pre>io.configure('production', function(){
+  io.enable('browser client minification');
+  io.enable('browser client etag');
+  io.enable('browser client gzip');
+  io.set('log level', 1);
+});
+</pre></section>
+      </article>
+
+      <article>
+       <h3>
+          Production configuration
+        </h3>
+        <p>The default transports might not be what you want, but you can change that.</p>
+        <p>
+        Enabling specific transports:
+        </p>
+        <section><pre>io.configure('production', function(){
+  io.set('transports', [
+    'websocket',
+    'flashsocket',
+    'htmlfile',
+    'xhr-polling',
+    'jsonp-polling'
+  ]);
+});
+</pre></section>
+      </article>
+
+      <article>
+       <h3>
+          Multi-process/server?
+        </h3>
+         <p>
+          <img class='centered' style='margin-top: 40px;' src='images/multi.png'/>
+        </p>
+      </article>
+
+      <article>
+       <h3>
+          Redis can relay between processes/servers
+        </h3>
+        <p>
+          Configure to use RedisStore
+        </p>
+        <section>
+        <pre>var redis = require('socket.io/node_modules/redis'),
+  RedisStore = require('socket.io/lib/stores/redis'),
+  pub    = redis.createClient(),
+  sub    = redis.createClient(),
+  client = redis.createClient();
+
+io.set('store', new RedisStore({
+  redisPub:    pub,
+  redisSub:    sub,
+  redisClient: client
+}));</pre>
+        </section>
+      </article>
+
+
+      <article>
+        <h3>
+          Resources
+        </h3>
+        
+        <p>Official site:</p>
+        <p><a href='http://socket.io'>socket.io</a></p>
+
+        <p>Github project site:</p>
+        <p><a href='https://github.com/LearnBoost/Socket.IO'>github.com/LearnBoost/Socket.IO</a></p>
+
+        <p>Wiki (lots of stuff):</p>
+        <p><a href='https://github.com/learnboost/socket.io/wiki'>github.com/LearnBoost/Socket.IO/wiki</a></p>
+      </article>
+ 
+      <article>
+        <h1>
+          Questions?
+        </h1>
+
+        <p>
+          <span>Twitter:</span>
+          <a href='http://twitter.com/mcantelon'>@mcantelon</a>
+        </p>
+        <p>
+          <span>Slides:</span>
+          <a href='http://mikecantelon.com/talks/rjug'>mikecantelon.com/talks/socket</a>
+        </p>
+      </article>
+
+    </section>
+
+  </body>
+</html>
